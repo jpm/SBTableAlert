@@ -273,12 +273,16 @@
 		[_alertView addSubview:_shadow];
 		[_alertView bringSubviewToFront:_shadow];
 		
-		[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification object:nil queue:nil usingBlock:^(NSNotification *n) {
-			dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), ^{[self layout];});
-		}];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) 
+                                                     name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	}
 	
 	return self;
+}
+
+- (void)orientationChanged
+{
+    [self performSelector:@selector(layout) withObject:nil afterDelay:0];
 }
 
 - (id)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelTitle messageFormat:(NSString *)message, ... {
